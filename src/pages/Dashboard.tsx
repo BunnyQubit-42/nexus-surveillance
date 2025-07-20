@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { StatusCard } from "@/components/StatusCard";
 import { ThreatAlert } from "@/components/ThreatAlert";
 import { DeviceCard } from "@/components/DeviceCard";
 import { ActivityLog } from "@/components/ActivityLog";
+import { HolographicGlobe } from "@/components/HolographicGlobe";
+import { LiveMonitor } from "@/components/LiveMonitor";
+import { NetworkScanner } from "@/components/NetworkScanner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 import {
   Shield,
   Activity,
@@ -20,6 +26,13 @@ import {
   Clock,
   Globe,
   Zap,
+  Play,
+  Download,
+  Settings,
+  Camera,
+  Wifi,
+  Lock,
+  Unlock,
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -53,7 +66,7 @@ const Dashboard = () => {
     }
   ]);
 
-  const devices = [
+  const [devices, setDevices] = useState([
     {
       id: "1",
       name: "Target Alpha",
@@ -86,37 +99,115 @@ const Dashboard = () => {
       ipAddress: "172.16.0.12",
       osInfo: "iOS 17"
     }
-  ];
+  ]);
+
+  const [activeOperations, setActiveOperations] = useState(0);
+  const [isGlobalScanActive, setIsGlobalScanActive] = useState(false);
+  const { toast } = useToast();
+
+  // Real-time updates simulation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveOperations(prev => prev + Math.floor(Math.random() * 3));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleDismissAlert = (id: string) => {
     setAlerts(alerts.filter(alert => alert.id !== id));
+    toast({
+      title: "Alert Dismissed",
+      description: "Alert has been marked as resolved.",
+    });
+  };
+
+  const handleStartMonitoring = (deviceId: string) => {
+    const device = devices.find(d => d.id === deviceId);
+    toast({
+      title: "Surveillance Initiated",
+      description: `Live monitoring started for ${device?.name}`,
+    });
+  };
+
+  const handleDataExtraction = () => {
+    toast({
+      title: "Data Extraction Started",
+      description: "Beginning comprehensive data collection from all active targets.",
+    });
+  };
+
+  const handleNetworkScan = () => {
+    setIsGlobalScanActive(true);
+    toast({
+      title: "Network Scan Initiated",
+      description: "Scanning for vulnerable targets in the network.",
+    });
+    
+    setTimeout(() => {
+      setIsGlobalScanActive(false);
+      toast({
+        title: "Scan Complete",
+        description: "3 new vulnerable targets discovered.",
+      });
+    }, 5000);
+  };
+
+  const handleDeployAgent = () => {
+    toast({
+      title: "Agent Deployed",
+      description: "Surveillance agent successfully deployed to target system.",
+    });
   };
 
   return (
-    <div className="min-h-screen matrix-grid">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-screen matrix-grid"
+    >
       <div className="p-6 space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+        {/* Enhanced Header with Glitch Effect */}
+        <motion.div 
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="flex items-center justify-between"
+        >
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Surveillance Control Center</h1>
-            <p className="text-muted-foreground">Real-time monitoring and intelligence dashboard</p>
+            <h1 className="text-4xl font-bold hologram-text glitch" data-text="NEXUS SURVEILLANCE">
+              NEXUS SURVEILLANCE
+            </h1>
+            <p className="text-muted-foreground">Real-time global intelligence operations</p>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 px-3 py-1 bg-green-500/20 rounded-full">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm text-green-400">System Online</span>
+          <div className="flex items-center gap-4">
+            <motion.div 
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="flex items-center gap-2 px-4 py-2 glass-panel border border-green-500/30"
+            >
+              <div className="status-indicator bg-green-500" />
+              <span className="text-sm text-green-400 font-mono">NEXUS ONLINE</span>
+            </motion.div>
+            <div className="text-sm text-muted-foreground font-mono">
+              OPS: {activeOperations}
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Status Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Enhanced Status Cards with 3D Effects */}
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+        >
           <StatusCard
             title="Active Targets"
             value="47"
             description="Devices under surveillance"
             icon={<Target className="w-4 h-4" />}
             trend={{ value: 12, isPositive: true }}
+            className="hover-glow btn-3d"
           />
           <StatusCard
             title="Data Collected"
@@ -124,6 +215,7 @@ const Dashboard = () => {
             description="Total intelligence gathered"
             icon={<Database className="w-4 h-4" />}
             trend={{ value: 8, isPositive: true }}
+            className="hover-glow btn-3d"
           />
           <StatusCard
             title="Active Alerts"
@@ -131,123 +223,147 @@ const Dashboard = () => {
             description="Requiring immediate attention"
             icon={<AlertTriangle className="w-4 h-4" />}
             variant="critical"
+            className="hover-glow btn-3d"
           />
           <StatusCard
-            title="Network Coverage"
-            value="94%"
-            description="Global surveillance reach"
-            icon={<Globe className="w-4 h-4" />}
-            trend={{ value: 3, isPositive: true }}
+            title="Operations"
+            value={activeOperations}
+            description="Active surveillance ops"
+            icon={<Activity className="w-4 h-4" />}
+            className="hover-glow btn-3d"
           />
-        </div>
+        </motion.div>
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Alerts Panel */}
-          <div className="lg:col-span-2 space-y-4">
-            <Card className="glass-panel">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-red-400" />
-                  Critical Alerts
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {alerts.map((alert) => (
-                  <ThreatAlert
-                    key={alert.id}
-                    {...alert}
-                    onDismiss={handleDismissAlert}
-                  />
-                ))}
-              </CardContent>
-            </Card>
+        {/* Interactive Tabs with Advanced Components */}
+        <Tabs defaultValue="overview" className="space-y-4">
+          <TabsList className="glass-panel border border-primary/30">
+            <TabsTrigger value="overview" className="btn-3d">Overview</TabsTrigger>
+            <TabsTrigger value="globe" className="btn-3d">Global View</TabsTrigger>
+            <TabsTrigger value="live" className="btn-3d">Live Monitor</TabsTrigger>
+            <TabsTrigger value="network" className="btn-3d">Network Scan</TabsTrigger>
+          </TabsList>
 
-            {/* Device Grid */}
-            <Card className="glass-panel">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Laptop className="w-5 h-5 text-primary" />
-                  Monitored Devices
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {devices.map((device) => (
-                    <DeviceCard key={device.id} {...device} />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-4">
+                <Card className="glass-panel hover-glow">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 hologram-text">
+                      <AlertTriangle className="w-5 h-5 text-red-400" />
+                      Critical Alerts
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <AnimatePresence>
+                      {alerts.map((alert, index) => (
+                        <motion.div
+                          key={alert.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          transition={{ delay: index * 0.1 }}
+                        >
+                          <ThreatAlert {...alert} onDismiss={handleDismissAlert} />
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </CardContent>
+                </Card>
 
-          {/* Activity Sidebar */}
-          <div className="space-y-4">
-            <ActivityLog entries={[]} />
-            
-            {/* Quick Actions */}
-            <Card className="glass-panel">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-primary" />
-                  Quick Actions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Button variant="secondary" className="w-full justify-start" size="sm">
-                  <Eye className="w-4 h-4 mr-2" />
-                  Start Live Monitor
-                </Button>
-                <Button variant="secondary" className="w-full justify-start" size="sm">
-                  <Database className="w-4 h-4 mr-2" />
-                  Extract Data
-                </Button>
-                <Button variant="secondary" className="w-full justify-start" size="sm">
-                  <Network className="w-4 h-4 mr-2" />
-                  Scan Network
-                </Button>
-                <Button variant="secondary" className="w-full justify-start" size="sm">
-                  <Shield className="w-4 h-4 mr-2" />
-                  Deploy Agent
-                </Button>
-              </CardContent>
-            </Card>
+                <Card className="glass-panel hover-glow">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 hologram-text">
+                      <Laptop className="w-5 h-5 text-primary" />
+                      Monitored Devices
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {devices.map((device) => (
+                        <DeviceCard 
+                          key={device.id} 
+                          {...device} 
+                          onMonitor={handleStartMonitoring}
+                        />
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
 
-            {/* System Status */}
-            <Card className="glass-panel">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Activity className="w-5 h-5 text-primary" />
-                  System Status
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">CPU Usage</span>
-                  <span className="text-sm text-foreground">67%</span>
-                </div>
-                <div className="w-full bg-secondary rounded-full h-2">
-                  <div className="bg-primary h-2 rounded-full" style={{ width: "67%" }} />
-                </div>
+              <div className="space-y-4">
+                <ActivityLog entries={[]} />
                 
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Memory</span>
-                  <span className="text-sm text-foreground">4.2/8 GB</span>
-                </div>
-                <div className="w-full bg-secondary rounded-full h-2">
-                  <div className="bg-primary h-2 rounded-full" style={{ width: "52%" }} />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Network</span>
-                  <span className="text-sm text-green-400">Optimal</span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+                <Card className="glass-panel hover-glow">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 hologram-text">
+                      <Zap className="w-5 h-5 text-primary" />
+                      Quick Actions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button className="w-full justify-start btn-3d hover-glow" size="sm">
+                          <Eye className="w-4 h-4 mr-2" />
+                          Start Live Monitor
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-4xl glass-panel">
+                        <DialogHeader>
+                          <DialogTitle>Live Surveillance Monitor</DialogTitle>
+                        </DialogHeader>
+                        <LiveMonitor targetId="1" targetName="Target Alpha" />
+                      </DialogContent>
+                    </Dialog>
+
+                    <Button 
+                      onClick={handleDataExtraction}
+                      className="w-full justify-start btn-3d hover-glow" 
+                      size="sm"
+                    >
+                      <Database className="w-4 h-4 mr-2" />
+                      Extract Data
+                    </Button>
+                    
+                    <Button 
+                      onClick={handleNetworkScan}
+                      disabled={isGlobalScanActive}
+                      className="w-full justify-start btn-3d hover-glow" 
+                      size="sm"
+                    >
+                      <Network className="w-4 h-4 mr-2" />
+                      {isGlobalScanActive ? "Scanning..." : "Scan Network"}
+                    </Button>
+                    
+                    <Button 
+                      onClick={handleDeployAgent}
+                      className="w-full justify-start btn-3d hover-glow" 
+                      size="sm"
+                    >
+                      <Shield className="w-4 h-4 mr-2" />
+                      Deploy Agent
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="globe">
+            <HolographicGlobe />
+          </TabsContent>
+
+          <TabsContent value="live">
+            <LiveMonitor targetId="1" targetName="Target Alpha" />
+          </TabsContent>
+
+          <TabsContent value="network">
+            <NetworkScanner />
+          </TabsContent>
+        </Tabs>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

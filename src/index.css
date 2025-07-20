@@ -58,14 +58,27 @@
     --gradient-danger: linear-gradient(135deg, hsl(0 84% 60%), hsl(0 84% 45%));
     --gradient-surface: linear-gradient(135deg, hsl(220 13% 12%), hsl(220 13% 8%));
 
-    /* Glows and effects */
+    /* Advanced effects and animations */
     --glow-primary: 0 0 20px hsl(189 100% 50% / 0.3);
     --glow-danger: 0 0 20px hsl(0 84% 60% / 0.3);
+    --glow-hologram: 0 0 30px hsl(189 100% 50% / 0.5);
     --shadow-elevated: 0 10px 25px -5px hsl(220 13% 4% / 0.5);
+    --shadow-glass: 0 8px 32px 0 hsl(189 100% 50% / 0.1);
+
+    /* 3D and hologram effects */
+    --hologram-gradient: linear-gradient(45deg, 
+      transparent 30%, 
+      hsl(189 100% 50% / 0.3) 50%, 
+      transparent 70%);
+    --scanner-line: linear-gradient(90deg, 
+      transparent, 
+      hsl(189 100% 50% / 0.8), 
+      transparent);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-glow: box-shadow 0.3s ease, transform 0.3s ease;
 
     --sidebar-background: 0 0% 98%;
 
@@ -143,43 +156,238 @@
 }
 
 @layer components {
-  /* Custom surveillance UI components */
+  /* Advanced glassmorphism and holographic effects */
   .glass-panel {
-    @apply bg-card/50 backdrop-blur-sm border border-border/50;
+    @apply bg-card/30 backdrop-blur-xl border border-border/30;
+    box-shadow: var(--shadow-glass);
+    position: relative;
+    overflow: hidden;
   }
-  
+
+  .glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--hologram-gradient);
+    transition: left 0.5s ease;
+    z-index: 1;
+  }
+
+  .glass-panel:hover::before {
+    left: 100%;
+  }
+
+  .glass-panel > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Enhanced holographic effects */
+  .hologram-border {
+    position: relative;
+    border: 1px solid transparent;
+    background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
+                linear-gradient(45deg, hsl(var(--primary) / 0.5), transparent, hsl(var(--primary) / 0.5)) border-box;
+  }
+
+  .hologram-text {
+    background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 10px hsl(var(--primary) / 0.5));
+  }
+
+  /* Scanner line animation */
+  .scanner-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scanner-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: var(--scanner-line);
+    animation: scanner-sweep 2s infinite ease-in-out;
+  }
+
+  @keyframes scanner-sweep {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+  }
+
+  /* Glitch effect */
+  .glitch {
+    position: relative;
+    animation: glitch 0.3s infinite;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch::before {
+    animation: glitch-1 0.3s infinite;
+    color: hsl(var(--primary));
+    z-index: -1;
+  }
+
+  .glitch::after {
+    animation: glitch-2 0.3s infinite;
+    color: hsl(var(--destructive));
+    z-index: -2;
+  }
+
+  @keyframes glitch {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+  }
+
+  @keyframes glitch-1 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-1px, 1px); }
+    40% { transform: translate(-1px, -1px); }
+    60% { transform: translate(1px, 1px); }
+    80% { transform: translate(1px, -1px); }
+  }
+
+  @keyframes glitch-2 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(1px, -1px); }
+    40% { transform: translate(1px, 1px); }
+    60% { transform: translate(-1px, -1px); }
+    80% { transform: translate(-1px, 1px); }
+  }
+
+  /* Enhanced threat indicators */
   .threat-critical {
     @apply bg-red-500/10 text-red-400 border-red-500/30;
+    animation: pulse-red 2s infinite;
   }
-  
+
   .threat-high {
     @apply bg-orange-500/10 text-orange-400 border-orange-500/30;
+    animation: pulse-orange 2s infinite;
   }
-  
+
   .threat-medium {
     @apply bg-yellow-500/10 text-yellow-400 border-yellow-500/30;
   }
-  
+
   .threat-low {
     @apply bg-green-500/10 text-green-400 border-green-500/30;
   }
-  
-  .status-indicator {
-    @apply w-2 h-2 rounded-full animate-pulse;
+
+  @keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 10px hsl(0 84% 60% / 0.3); }
+    50% { box-shadow: 0 0 20px hsl(0 84% 60% / 0.6); }
   }
-  
+
+  @keyframes pulse-orange {
+    0%, 100% { box-shadow: 0 0 10px hsl(25 95% 53% / 0.3); }
+    50% { box-shadow: 0 0 20px hsl(25 95% 53% / 0.6); }
+  }
+
+  /* 3D button effects */
+  .btn-3d {
+    transform-style: preserve-3d;
+    transition: var(--transition-glow);
+    position: relative;
+  }
+
+  .btn-3d:hover {
+    transform: translateY(-2px) rotateX(10deg);
+    box-shadow: 
+      0 10px 20px hsl(var(--primary) / 0.3),
+      0 0 30px hsl(var(--primary) / 0.5);
+  }
+
+  .btn-3d:active {
+    transform: translateY(0px) rotateX(0deg);
+  }
+
+  /* Status indicator animations */
+  .status-indicator {
+    @apply w-3 h-3 rounded-full;
+    animation: status-pulse 2s infinite;
+  }
+
+  @keyframes status-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* Matrix background enhancement */
   .matrix-grid {
     background-image: 
-      linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
+      linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    animation: matrix-scroll 20s linear infinite;
   }
-  
+
+  @keyframes matrix-scroll {
+    0% { background-position: 0 0; }
+    100% { background-position: 30px 30px; }
+  }
+
+  /* Interactive hover effects */
+  .hover-glow {
+    transition: var(--transition-glow);
+  }
+
+  .hover-glow:hover {
+    box-shadow: var(--glow-hologram);
+    transform: translateY(-1px);
+  }
+
   .surveillance-glow {
     box-shadow: var(--glow-primary);
   }
-  
+
   .danger-glow {
     box-shadow: var(--glow-danger);
+  }
+
+  /* Data stream effect */
+  .data-stream {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .data-stream::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      transparent, 
+      hsl(var(--primary)), 
+      transparent);
+    animation: data-flow 1.5s ease-in-out infinite;
+  }
+
+  @keyframes data-flow {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
   }
 }
