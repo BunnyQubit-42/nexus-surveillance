@@ -178,7 +178,7 @@ function ScanLines() {
 
 export function HolographicGlobe() {
   return (
-    <div className="w-full h-[400px] bg-black/20 rounded-lg border border-primary/30 relative overflow-hidden">
+    <div className="w-full h-[600px] bg-black/20 rounded-lg border border-primary/30 relative overflow-hidden glass-panel">
       {/* Scanner line effect */}
       <div className="absolute inset-0 scanner-line" />
       

@@ -224,56 +224,46 @@
     100% { left: 100%; }
   }
 
-  /* Glitch effect */
-  .glitch {
+  /* Enhanced header styling */
+  .nexus-header {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, 
+      hsl(var(--primary)), 
+      hsl(var(--primary-glow)), 
+      #00ffff,
+      hsl(var(--primary))
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+    text-shadow: 0 0 30px hsl(var(--primary) / 0.5);
     position: relative;
-    animation: glitch 0.3s infinite;
   }
 
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
+  .nexus-header::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), transparent);
+    animation: scanLine 4s linear infinite;
   }
 
-  .glitch::before {
-    animation: glitch-1 0.3s infinite;
-    color: hsl(var(--primary));
-    z-index: -1;
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
   }
 
-  .glitch::after {
-    animation: glitch-2 0.3s infinite;
-    color: hsl(var(--destructive));
-    z-index: -2;
-  }
-
-  @keyframes glitch {
-    0%, 100% { transform: translate(0); }
-    20% { transform: translate(-2px, 2px); }
-    40% { transform: translate(-2px, -2px); }
-    60% { transform: translate(2px, 2px); }
-    80% { transform: translate(2px, -2px); }
-  }
-
-  @keyframes glitch-1 {
-    0%, 100% { transform: translate(0); }
-    20% { transform: translate(-1px, 1px); }
-    40% { transform: translate(-1px, -1px); }
-    60% { transform: translate(1px, 1px); }
-    80% { transform: translate(1px, -1px); }
-  }
-
-  @keyframes glitch-2 {
-    0%, 100% { transform: translate(0); }
-    20% { transform: translate(1px, -1px); }
-    40% { transform: translate(1px, 1px); }
-    60% { transform: translate(-1px, -1px); }
-    80% { transform: translate(-1px, 1px); }
+  @keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
   }
 
   /* Enhanced threat indicators */

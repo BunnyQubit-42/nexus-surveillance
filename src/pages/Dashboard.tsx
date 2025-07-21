@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
   Shield,
   Activity,
@@ -174,10 +175,10 @@ const Dashboard = () => {
           className="flex items-center justify-between"
         >
           <div>
-            <h1 className="text-4xl font-bold hologram-text glitch" data-text="NEXUS SURVEILLANCE">
+            <h1 className="text-4xl font-bold nexus-header">
               NEXUS SURVEILLANCE
             </h1>
-            <p className="text-muted-foreground">Real-time global intelligence operations</p>
+            <p className="text-muted-foreground font-space">Real-time global intelligence operations</p>
           </div>
           <div className="flex items-center gap-4">
             <motion.div 
@@ -186,11 +187,12 @@ const Dashboard = () => {
               className="flex items-center gap-2 px-4 py-2 glass-panel border border-green-500/30"
             >
               <div className="status-indicator bg-green-500" />
-              <span className="text-sm text-green-400 font-mono">NEXUS ONLINE</span>
+              <span className="text-sm text-green-400 font-cyber">NEXUS ONLINE</span>
             </motion.div>
-            <div className="text-sm text-muted-foreground font-mono">
+            <div className="text-sm text-muted-foreground font-cyber">
               OPS: {activeOperations}
             </div>
+            <ThemeToggle />
           </div>
         </motion.div>
 
