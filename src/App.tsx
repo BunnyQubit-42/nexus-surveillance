@@ -5,39 +5,42 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SurveillanceSidebar } from "./components/SurveillanceSidebar";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import Dashboard from "./pages/Dashboard";
+import MonitorPage from "./pages/MonitorPage";
+import DevicesPage from "./pages/DevicesPage";
+import TargetsPage from "./pages/TargetsPage";
+import LocationsPage from "./pages/LocationsPage";
+import NetworkPage from "./pages/NetworkPage";
+import CamerasPage from "./pages/CamerasPage";
+import ExtractionPage from "./pages/ExtractionPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="dark" storageKey="nexus-ui-theme">
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <SidebarProvider>
-            <div className="min-h-screen flex w-full bg-background">
-              <SurveillanceSidebar />
-              <div className="flex-1 flex flex-col">
-                <header className="h-12 flex items-center border-b border-border/50 px-4">
-                  <SidebarTrigger className="mr-4" />
-                  <div className="flex-1" />
-                  <ThemeToggle />
-                </header>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <SidebarProvider>
+          <div className="min-h-screen flex w-full bg-background">
+            <SurveillanceSidebar />
+            <div className="flex-1 flex flex-col">
+              <header className="h-12 flex items-center border-b border-border/50 px-4">
+                <SidebarTrigger className="mr-4" />
+                <div className="flex-1" />
+              </header>
               <main className="flex-1">
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
-                  <Route path="/monitor" element={<Dashboard />} />
-                  <Route path="/devices" element={<Dashboard />} />
-                  <Route path="/targets" element={<Dashboard />} />
-                  <Route path="/locations" element={<Dashboard />} />
-                  <Route path="/network" element={<Dashboard />} />
-                  <Route path="/cameras" element={<Dashboard />} />
-                  <Route path="/extraction" element={<Dashboard />} />
+                  <Route path="/monitor" element={<MonitorPage />} />
+                  <Route path="/devices" element={<DevicesPage />} />
+                  <Route path="/targets" element={<TargetsPage />} />
+                  <Route path="/locations" element={<LocationsPage />} />
+                  <Route path="/network" element={<NetworkPage />} />
+                  <Route path="/cameras" element={<CamerasPage />} />
+                  <Route path="/extraction" element={<ExtractionPage />} />
                   <Route path="/reports" element={<Dashboard />} />
                   <Route path="/alerts" element={<Dashboard />} />
                   <Route path="/users" element={<Dashboard />} />
@@ -51,7 +54,6 @@ const App = () => (
         </SidebarProvider>
       </BrowserRouter>
     </TooltipProvider>
-  </ThemeProvider>
   </QueryClientProvider>
 );
 

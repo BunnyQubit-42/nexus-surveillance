@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
   Shield,
   Activity,
@@ -192,7 +191,6 @@ const Dashboard = () => {
             <div className="text-sm text-muted-foreground font-cyber">
               OPS: {activeOperations}
             </div>
-            <ThemeToggle />
           </div>
         </motion.div>
 
