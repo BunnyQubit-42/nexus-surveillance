@@ -1,22 +1,22 @@
-# Welcome to your Lovable project
+# Welcome to your Bunny project
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/bbb4fb0a-0ebd-4342-9416-d60d1c0f5af1
+**URL**: https://bunny.dev/projects/bbb4fb0a-0ebd-4342-9416-d60d1c0f5af1
 
 ## How can I edit this code?
 
 There are several ways of editing your application.
 
-**Use Lovable**
+**Use Bunny**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/bbb4fb0a-0ebd-4342-9416-d60d1c0f5af1) and start prompting.
+Simply visit the [Bunny Project](https://bunny.dev/projects/bbb4fb0a-0ebd-4342-9416-d60d1c0f5af1) and start prompting.
 
-Changes made via Lovable will be committed automatically to this repo.
+Changes made via Bunny will be committed automatically to this repo.
 
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Bunny.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -62,12 +62,12 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/bbb4fb0a-0ebd-4342-9416-d60d1c0f5af1) and click on Share -> Publish.
+Simply open [Bunny](https://bunny.dev/projects/bbb4fb0a-0ebd-4342-9416-d60d1c0f5af1) and click on Share -> Publish.
 
-## Can I connect a custom domain to my Lovable project?
+## Can I connect a custom domain to my Bunny project?
 
 Yes, you can!
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Read more here: [Setting up a custom domain](https://docs.bunny.dev/tips-tricks/custom-domain#step-by-step-guide)
