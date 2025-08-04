@@ -73,11 +73,9 @@ function Globe() {
           <Line
             key={`line-${i}`}
             points={points}
-            color="#00ffff"
-            opacity={0.2}
-            transparent
-            lineWidth={1}
-          />
+          >
+            <lineBasicMaterial color="#00ffff" transparent opacity={0.2} />
+          </Line>
         );
       })}
     </group>
@@ -135,11 +133,9 @@ function TargetMarker({ target }: { target: Target }) {
           new THREE.Vector3(0, 0, 0),
           new THREE.Vector3(...target.position).normalize()
         ]}
-        color="#00ffff"
-        opacity={0.4}
-        transparent
-        lineWidth={2}
-      />
+      >
+        <lineBasicMaterial color="#00ffff" transparent opacity={0.4} />
+      </Line>
 
       {/* Hover label */}
       <Html position={[0, 0.1, 0]} center>
