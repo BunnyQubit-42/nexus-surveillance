@@ -40,14 +40,15 @@ function Globe() {
   return (
     <group>
       {/* Main globe */}
-      <Sphere ref={meshRef} args={[1, 64, 32]}>
+      <mesh ref={meshRef}>
+        <sphereGeometry args={[1, 64, 32]} />
         <meshPhongMaterial
           color="#001122"
           transparent
           opacity={0.1}
           wireframe={false}
         />
-      </Sphere>
+      </mesh>
 
       {/* Wireframe overlay */}
       <lineSegments ref={wireframeRef} geometry={wireframeGeometry}>
@@ -70,7 +71,7 @@ function Globe() {
         }
         return (
           <Line
-            key={i}
+            key={`line-${i}`}
             points={points}
             color="#00ffff"
             opacity={0.2}
