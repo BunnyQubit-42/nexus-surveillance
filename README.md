@@ -1,4 +1,4 @@
-# Welcome to your Bunny project
+# Welcome to Bunny's surveillance project 'Nexus'
 
 ## Project info
 
